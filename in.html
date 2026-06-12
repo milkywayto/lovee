@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Konfirmasi Cinta</title>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .box-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 60px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            z-index: 10;
+        }
+
+        h1 {
+            font-family: 'Pacifico', cursive;
+            color: #ff4d6d;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0px #ffc2c2;
+        }
+
+        p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            position: relative;
+            height: 60px; /* Ruang lebih untuk perpindahan tombol */
+            align-items: center;
+        }
+
+        button {
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 700;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, background 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: absolute; /* Agar bisa berpindah posisi */
+        }
+
+        #yesBtn {
+            background-color: #ff4d6d;
+            color: white;
+            left: 50%; 
+            transform: translateX(-100%);/* Posisi kiri */
+        }
+
+        #yesBtn:hover {
+            transform: translateX(-150%) scale(1.1);
+            background-color: #ff2e4d;
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4);
+        }
+
+        #noBtn {
+            background-color: #a0a0a0;
+            color: white;
+            left: 50%;
+            transform: translateX(50%); /* Posisi kanan */
+        }
+
+        /* Animasi Hujan Hati */
+        .heart {
+            position: absolute;
+            top: -10%;
+            color: #ff4d6d;
+            font-size: 2rem;
+            animation: fall 4s linear forwards;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Pesan Sukses */
+        .success-page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .success-page h2 {
+            font-family: 'Pacifico', cursive;
+            color: #ff4d6d;
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+        }
+
+        .success-page p {
+            font-size: 1.4rem;
+            color: #ff4d6d;
+            font-weight: bold;
+            margin-bottom: 0;
+        }
+
+        .heart-img {
+            font-size: 5rem;
+            margin: 20px 0;
+            animation: beat 1s infinite alternate;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes beat {
+            from { transform: scale(1); }
+            to { transform: scale(1.2); }
+        }
+
+        /* Responsif */
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .box-container { padding: 30px 20px; }
+            button { padding: 12px 25px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Audio Player (Ganti 'lagu.mp3' dengan file lagu Anda) -->
+    <!-- <audio id="bgMusic" loop>
+        <source src="lagu.mp3" type="audio/mpeg">
+    </audio> -->
+
+    <div class="box-container">
+        
+        <!-- Halaman Pertanyaan -->
+        <div id="questionPage">
+            <h1>Will you be my lover?</h1>
+            <p>Heyy, ada yang mau aku tanyain nih...<br>Mau nggak jadi pacar aku? 🥺</p>
+            
+            <div class="btn-group">
+                <!-- Tombol Mau (Posisi Kiri) -->
+                <button id="yesBtn" onclick="terima()">i really want to! 💖</button>
+                
+                <!-- Tombol Enggak (Posisi Kanan) -->
+                <button id="noBtn" onmouseover="noClick()" onclick="noClick()">Enggak 😐</button>
+            </div>
+        </div>
+
+        <!-- Halaman Sukses -->
+        <div id="successPage" class="success-page">
+            <div class="heart-img">💖</div>
+            <h2>Yeay! Makasih ya!</h2>
+            <p>Sekarang kita pacaran.<br>Aku cinta kamu! 😘❤️</p>
+        </div>
+
+    </div>
+
+    <script>
+        // --- Fungsi Tombol Mau ---
+        function terima() {
+            // Tampilkan halaman sukses
+            document.getElementById('questionPage').style.display = 'none';
+            document.getElementById('successPage').style.display = 'flex';
+            
+            // Mulai hujan hati
+            startRain();
+            
+            // Mainkan musik (jika sudah ada filenya)
+            // document.getElementById('bgMusic').play();
+        }
+
+        // --- Fungsi Tombol Enggak (Lari) ---
+        function noClick() {
+            const noBtn = document.getElementById('noBtn');
+            const container = document.querySelector('.btn-group');
+            
+            // Acak posisi baru dalam area container
+            // Kita batasi agar tidak keluar dari container
+            const containerWidth = container.offsetWidth;
+            const containerHeight = container.offsetHeight;
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+
+            // Hitung posisi acak agar tetap di dalam
+            const randomX = Math.floor(Math.random() * (containerWidth - btnWidth));
+            const randomY = Math.floor(Math.random() * (containerHeight - btnHeight));
+
+            // Terapkan perpindahan
+            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            
+            // Opsional: Ubah warna tombol jadi merah sebentar agar terlihat "tertangkap" lalu melarikan diri
+            noBtn.style.backgroundColor = '#ff9999';
+            setTimeout(() => {
+                noBtn.style.backgroundColor = '#a0a0a0';
+            }, 200);
+        }
+
+        // --- Animasi Hujan Hati ---
+        function startRain() {
+            const colors = ['#ff4d6d', '#ff85a1', '#ffb3c1', '#ffecd2'];
+            
+            // Buat 50 hati
+            for (let i = 0; i < 50; i++) {
+                setTimeout(createHeart, i * 100); // Jeda bertahap
+            }
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤'; // Hati sederhana
+            heart.className = 'heart';
+            
+            // Ukuran acak
+            const size = Math.random() * 20 + 10;
+            heart.style.fontSize = size + 'px';
+            
+            // Posisi horizontal acak
+            heart.style.left = Math.random() * 100 + 'vw';
+            
+            // Warna acak dari daftar warna
+            heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Kecepatan jatuh acak
+            const duration = Math.random() * 3 + 2;
+            heart.style.animationDuration = duration + 's';
+            
+            document.body.appendChild(heart);
+            
+            // Hapus elemen setelah动画 selesai agar tidak memperlambat browser
+            setTimeout(() => {
+                heart.remove();
+            }, duration * 1000);
+        }
+
+        // --- Musik Otomatis (Opsional - browsers usually block autoplay) ---
+        // Jika ingin memainkan musik saat tombol diklik:
+        // document.getElementById('yesBtn').addEventListener('click', function() {
+        //     const audio = document.getElementById('bgMusic');
+        //     audio.volume = 0.5;
+        //     audio.play().catch(e => console.log("Autoplay blocked, user interaction needed"));
+        // });
+    </script>
+</body>
+</html>
